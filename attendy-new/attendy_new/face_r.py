@@ -1,9 +1,8 @@
 import face_recognition
 import cv2
-import numpy as np
 import os
 
-similarity_threshold = 0.5
+similarity_threshold = 0.4
 
 face_images_directory = "attendy-new/training_data/"
 supported_extensions = [".jpg", ".jpeg", ".png"]
@@ -50,11 +49,14 @@ while True:
 
         for name, encodings in known_face_encodings.items():
             distances = face_recognition.face_distance(encodings, face_encoding)
-            min_distance = min(distances)
-
-            if min_distance < best_match_distance:
-                best_match_name = name
-                best_match_distance = min_distance
+            try:
+                min_distance = min(distances)
+                if min_distance < best_match_distance:
+                    best_match_name = name
+                    best_match_distance = min_distance
+            except :
+                print("distance error")
+            
         if best_match_distance > similarity_threshold :
             best_match_name = "Unknown"
             
